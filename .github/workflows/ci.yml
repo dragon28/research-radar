@@ -21,6 +21,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -35,3 +37,5 @@ jobs:
           make n8n-run | tee n8n.log
           grep -q "Execution was successful" n8n.log
           ls ci/posts/*.md
+          pkill -f 'radar serve' || true
+          pkill -f 'http.server 8000' || true
