@@ -1,0 +1,1 @@
+{"name":"radar-n8n","private":true,"dependencies":{"n8n":"^2.45.7","sqlite3":"^5.1.7"},"allowScripts":{"sqlite3@5.1.7":true}}

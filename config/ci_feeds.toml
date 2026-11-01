@@ -1,0 +1,20 @@
+# Saved sample feeds served from localhost in CI (no internet needed).
+[[feed]]
+name = "Sample Nano"
+url = "http://127.0.0.1:8000/nano.xml"
+topic = "nano-technology"
+
+[[feed]]
+name = "Sample Bio"
+url = "http://127.0.0.1:8000/bio.atom"
+topic = "bio-technology"
+
+[[feed]]
+name = "Sample Chem"
+url = "http://127.0.0.1:8000/chem.xml"
+topic = "chemical-technology"
+
+[[feed]]
+name = "Missing feed"
+url = "http://127.0.0.1:8000/does-not-exist.xml"
+topic = "computer-technology"

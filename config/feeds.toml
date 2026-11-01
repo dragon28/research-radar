@@ -1,0 +1,37 @@
+# Feeds checked with real requests on 2026-11-01 (all HTTP 200).
+# topic = default topic page when the keyword rules find no better match.
+
+[[feed]]
+name = "Phys.org Nanotechnology"
+url = "https://phys.org/rss-feed/nanotech-news/"
+topic = "nano-technology"
+
+[[feed]]
+name = "ScienceDaily Nanotechnology"
+url = "https://www.sciencedaily.com/rss/matter_energy/nanotechnology.xml"
+topic = "nano-technology"
+
+[[feed]]
+name = "Phys.org Biotechnology"
+url = "https://phys.org/rss-feed/biology-news/biotechnology/"
+topic = "bio-technology"
+
+[[feed]]
+name = "ScienceDaily Biotechnology"
+url = "https://www.sciencedaily.com/rss/plants_animals/biotechnology.xml"
+topic = "bio-technology"
+
+[[feed]]
+name = "Phys.org Chemistry"
+url = "https://phys.org/rss-feed/chemistry-news/"
+topic = "chemical-technology"
+
+[[feed]]
+name = "ScienceDaily Chemistry"
+url = "https://www.sciencedaily.com/rss/matter_energy/chemistry.xml"
+topic = "chemical-technology"
+
+[[feed]]
+name = "ScienceDaily Computers & Math"
+url = "https://www.sciencedaily.com/rss/computers_math.xml"
+topic = "computer-technology"

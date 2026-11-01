@@ -1,0 +1,8 @@
+data/
+out/
+.n8n/
+n8n/node_modules/
+n8n/install.log
+.venv/
+__pycache__/
+*.pyc

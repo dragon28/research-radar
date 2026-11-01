@@ -1,0 +1,31 @@
+{
+  "now": "2026-11-01T06:00:00+00:00",
+  "feeds": [
+    {
+      "name": "Sample Nano",
+      "topic": "nano-technology",
+      "file": "nano.xml"
+    },
+    {
+      "name": "Sample Bio",
+      "topic": "bio-technology",
+      "file": "bio.atom"
+    },
+    {
+      "name": "Sample Chem",
+      "topic": "chemical-technology",
+      "file": "chem.xml"
+    },
+    {
+      "name": "Broken feed",
+      "topic": "computer-technology",
+      "file": "broken.xml"
+    },
+    {
+      "name": "Offline feed",
+      "topic": "computer-technology",
+      "file": "missing.xml",
+      "status_code": 503
+    }
+  ]
+}

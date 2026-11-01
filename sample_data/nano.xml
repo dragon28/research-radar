@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel><title>Sample Nano News</title>
+<item><title>Graphene membrane filters salt from seawater</title>
+<link>https://example.org/news/graphene-membrane?utm_source=rss</link><guid>nano-1</guid>
+<pubDate>Wed, 28 Oct 2026 09:00:00 GMT</pubDate>
+<description>&lt;p&gt;Researchers made a &lt;b&gt;graphene&lt;/b&gt; nanopore membrane.&lt;/p&gt;&lt;script&gt;alert(1)&lt;/script&gt;</description></item>
+<item><title>Quantum dots light up tumour cells</title>
+<link>https://example.org/news/quantum-dots</link><guid>nano-2</guid>
+<pubDate>Thu, 29 Oct 2026 10:00:00 GMT</pubDate>
+<description>Quantum dot labels help doctors see protein markers in cells.</description></item>
+<item><title>Bad link is dropped</title><link>javascript:alert(1)</link><guid>nano-3</guid></item>
+<item><title>Old story from last year</title><link>https://example.org/news/old</link>
+<pubDate>Mon, 03 Mar 2025 10:00:00 GMT</pubDate></item>
+</channel></rss>

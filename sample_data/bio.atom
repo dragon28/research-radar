@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Sample Bio</title>
+<entry><title>CRISPR enzyme edits RNA without cutting DNA</title>
+<link rel="alternate" href="https://example.org/bio/crispr-rna"/><id>bio-1</id>
+<updated>2026-10-30T08:00:00Z</updated><summary>A new enzyme edits RNA. {{ site.title }} [link](javascript:x)</summary></entry>
+<entry><title>Graphene Membrane Filters Salt From Seawater!</title>
+<link rel="alternate" href="https://other.example.com/copy-of-graphene"/><id>bio-2</id>
+<updated>2026-10-30T09:00:00Z</updated><summary>Same story, other site.</summary></entry>
+<entry><title>Machine learning designs new proteins</title>
+<link rel="alternate" href="https://example.org/bio/ml-proteins"/><id>bio-3</id>
+<summary>An algorithm and neural network design protein shapes for computing tasks.</summary></entry>
+</feed>

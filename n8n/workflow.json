@@ -1,0 +1,305 @@
+{
+  "id": "ResearchRadar01",
+  "name": "Research Radar - weekly digest",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "dbb41038-c2ad-5b1b-afd1-63e185782022",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "id": "7cb02e39-da3a-5cdd-b677-8d6be915fd3b",
+      "name": "Every Monday 07:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ 'http://127.0.0.1:8765/feeds' }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "879af785-2c00-53ce-96c0-cc24c3129e0d",
+      "name": "Get feed list",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        100
+      ],
+      "retryOnFail": true,
+      "maxTries": 3
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "feeds",
+        "options": {}
+      },
+      "id": "db8da1e9-17c1-544c-939e-ed513e4cbb6e",
+      "name": "Split feeds",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        480,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "research-radar/0.1 (+https://github.com/dragon28/research-radar)"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 20000,
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 1000
+            }
+          }
+        }
+      },
+      "id": "c9160e4f-a9d8-5651-a8f6-68e1fb3ca841",
+      "name": "Fetch feed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        100
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "onError": "continueRegularOutput",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pair each fetch result with the feed it came from (same order), then send one batch.\nconst feeds = $('Split feeds').all();\nconst results = $input.all();\nconst out = feeds.map((f, i) => {\n  const r = (results[i] || {}).json || {};\n  const err = r.error ? (r.error.message || String(r.error)) : undefined;\n  return {\n    name: f.json.name,\n    topic: f.json.topic,\n    status_code: r.statusCode ?? null,\n    body: typeof r.data === 'string' ? r.data : (typeof r.body === 'string' ? r.body : ''),\n    error: err,\n  };\n});\nreturn [{ json: { feeds: out } }];"
+      },
+      "id": "c9dfb4e2-bf96-5ac6-aa02-32f68151ba43",
+      "name": "Bundle results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'http://127.0.0.1:8765/digest' }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "c5d29cb6-23dd-58b1-a15e-35b6dae93708",
+      "name": "Build digest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1200,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.new_items }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "2161a904-d42f-562c-bfe7-ae43a9bab7f3",
+      "name": "New stories?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        100
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "f32f9739-1003-5960-8d62-da4f68b77119",
+      "name": "Draft ready for review",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        0
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "61d7af1b-f7e0-51a8-83d7-a1853fdd02bc",
+      "name": "Nothing new this run",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "Get feed list",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Every Monday 07:00": {
+      "main": [
+        [
+          {
+            "node": "Get feed list",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get feed list": {
+      "main": [
+        [
+          {
+            "node": "Split feeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split feeds": {
+      "main": [
+        [
+          {
+            "node": "Fetch feed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch feed": {
+      "main": [
+        [
+          {
+            "node": "Bundle results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bundle results": {
+      "main": [
+        [
+          {
+            "node": "Build digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build digest": {
+      "main": [
+        [
+          {
+            "node": "New stories?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "New stories?": {
+      "main": [
+        [
+          {
+            "node": "Draft ready for review",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Nothing new this run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "UTC"
+  },
+  "pinData": {}
+}

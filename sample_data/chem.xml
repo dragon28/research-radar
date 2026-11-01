@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<rss version="2.0"><channel><title>Sample Chem</title>
+<item><title>Cheaper catalyst turns CO2 into fuel</title>
+<link>https://www.example.org/news/quantum-dots/</link><guid>chem-dup-url</guid>
+<pubDate>Fri, 30 Oct 2026 07:00:00 GMT</pubDate><description>Same URL as a nano item, so it is a duplicate.</description></item>
+<item><title>New polymer battery electrolyte resists fire</title>
+<link>https://example.org/chem/battery</link><guid>chem-2</guid>
+<pubDate>Fri, 30 Oct 2026 12:00:00 GMT</pubDate><description>A polymer electrolyte for a safer battery.</description></item>
+</channel></rss>
