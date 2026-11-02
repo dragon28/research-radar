@@ -4,6 +4,10 @@
 
 Every week, an **n8n** workflow collects new science and technology stories from public news feeds, removes duplicates, sorts them into the topic pages of [dragon28.github.io](https://dragon28.github.io) (nano, bio, chemical, computer), and writes a draft blog post. A person reviews the draft before anything is published.
 
+![The Research Radar workflow in the n8n editor after a successful run: manual or weekly trigger, get feed list, fetch 7 feeds, build digest, then branch on whether there are new stories](docs/n8n-workflow.png)
+
+*A manual run in the local n8n editor (every node green, 7 feeds fetched). The weekly scheduled run uses the same workflow on GitHub Actions; see [research-radar.yml](https://github.com/dragon28/dragon28.github.io/blob/gh-pages/.github/workflows/research-radar.yml).*
+
 n8n does the orchestration (schedule, fetching each feed with retries, branching). A small tested Python package does the processing (parsing, cleaning, deduplication, topic rules, rendering).
 
 ```mermaid
@@ -62,7 +66,7 @@ Drafts are written to `out/posts/`. To publish one, copy it into the site repo u
 
 ## Limitations
 
-- The schedule only fires while this computer and n8n are running. n8n is not hosted anywhere.
+- The weekly run happens on GitHub Actions (Sunday 22:00 UTC) in the website repo, which opens a draft PR with the post. There is no always-on n8n server; the editor only runs locally. GitHub can start scheduled runs late and pauses them after 60 days without repo activity.
 - Topic labels come from keyword rules and can be wrong. For example, a cell-imaging story can count as bio even when it is mostly about nanoparticles.
 - No summaries are written; the excerpts are the publishers' own feed text.
 - A news story is not a peer-reviewed result, and the digest does not judge scientific quality.
