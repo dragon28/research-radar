@@ -6,13 +6,24 @@ Every week, an **n8n** workflow collects new science and technology stories from
 
 ![The Research Radar workflow in the n8n editor after a successful run: manual or weekly trigger, get feed list, fetch 7 feeds, build digest, then branch on whether there are new stories](docs/n8n-workflow.png)
 
-*A manual run in the local n8n editor (every node green, 7 feeds fetched). The weekly scheduled run uses the same workflow on GitHub Actions; see [research-radar.yml](https://github.com/dragon28/dragon28.github.io/blob/gh-pages/.github/workflows/research-radar.yml).*
+## Where it runs
+
+n8n is hosted on **GitHub Actions**, not on a personal computer. Every Sunday at 22:00 UTC a GitHub runner installs n8n and the Python service, runs this workflow against the live feeds, and opens a draft pull request with the post on [dragon28.github.io](https://github.com/dragon28/dragon28.github.io/pulls). Nothing is published until that PR is merged.
+
+[![research-radar](https://github.com/dragon28/dragon28.github.io/actions/workflows/research-radar.yml/badge.svg)](https://github.com/dragon28/dragon28.github.io/actions/workflows/research-radar.yml)
+
+- Workflow file: [research-radar.yml](https://github.com/dragon28/dragon28.github.io/blob/gh-pages/.github/workflows/research-radar.yml) (also runnable by hand from the Actions tab)
+- `127.0.0.1` in the workflow means the GitHub runner itself.
+- Dedup state (SQLite) is kept between runs on the `radar-state` branch.
+- The "Every Monday 07:00" trigger inside the n8n workflow is unused; the Actions cron is the real schedule.
+
+The screenshot above shows the same workflow opened in the n8n editor.
 
 n8n does the orchestration (schedule, fetching each feed with retries, branching). A small tested Python package does the processing (parsing, cleaning, deduplication, topic rules, rendering).
 
 ```mermaid
 flowchart LR
-  T[Manual run / every Monday 07:00 UTC] --> L[GET /feeds]
+  T[GitHub Actions: Sunday 22:00 UTC / manual] --> L[GET /feeds]
   L --> S[Split feeds]
   S --> F[Fetch each feed<br/>timeout 20s, 3 tries,<br/>failures continue]
   F --> B[Bundle results]
@@ -33,7 +44,7 @@ make demo     # saved sample feeds -> out/demo/2026-11-01-research-radar-2026-w4
 
 The demo uses five saved feeds, including one broken and one offline. It runs twice, and the second run must add nothing. Result: 5 new stories, 2 duplicates caught (same URL; same headline on another site), 1 story too old, 1 unsafe `javascript:` link dropped, and 2 failed feeds reported without stopping the run.
 
-## Run with n8n
+## Run with n8n locally (optional, for development only)
 
 Needs Node.js 24 or newer. n8n is installed inside this folder, not system-wide.
 
@@ -66,7 +77,7 @@ Drafts are written to `out/posts/`. To publish one, copy it into the site repo u
 
 ## Limitations
 
-- The weekly run happens on GitHub Actions (Sunday 22:00 UTC) in the website repo, which opens a draft PR with the post. There is no always-on n8n server; the editor only runs locally. GitHub can start scheduled runs late and pauses them after 60 days without repo activity.
+- GitHub Actions runs n8n as a scheduled job, so there is no public n8n editor URL. GitHub can start scheduled runs late and pauses schedules after 60 days without repo activity.
 - Topic labels come from keyword rules and can be wrong. For example, a cell-imaging story can count as bio even when it is mostly about nanoparticles.
 - No summaries are written; the excerpts are the publishers' own feed text.
 - A news story is not a peer-reviewed result, and the digest does not judge scientific quality.
