@@ -39,7 +39,7 @@ def test_post_escapes_untrusted_text(tmp_path):
     assert name == "2026-11-01-research-radar-2026-w44.md"
     body = md.split("<!--more-->")[1]
     assert "{{" not in body and "<img" not in body and "\\[click\\]" in body
-    assert "categories:\n    - nano-technology" in md
+    assert "categories:\n    - research-radar\n---" in md
 
 
 def test_empty_week_renders_nothing(tmp_path):

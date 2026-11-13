@@ -128,7 +128,7 @@ def render_post(store: Store, week: str) -> tuple[str, str] | None:
         "tags:",
         "    - research-radar",
         "categories:",
-        *[f"    - {t}" for t in present],
+        "    - research-radar",
         "---",
         "",
         f"New stories from {len(sources)} science news feeds for {span}, sorted by topic. "
